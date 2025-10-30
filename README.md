@@ -61,9 +61,9 @@ Na aba Condições de aparência, marque:
 “Arquivos”
 
 E adicione os padrões:
-    ```bash
+   ```bash
     *.zip;*.rar;*.7z;*.tar;*.gz;*.bz2;*.xz;*.tgz;*.tbz2;*.lz4
-    ```
+   ```
 
 Clique em OK para salvar.
 
@@ -82,13 +82,13 @@ Um terminal abrirá mostrando o progresso; ao finalizar, o arquivo original ser�
 
 Se quiser, você pode mudar o comando para não abrir terminal (rodar silencioso):
 
-    ```bash
+   ```bash
     bash -c 'extrair_e_apagar %f'
-    ```
+   ```
 Ou, se quiser uma notificação no fim:
-    ```bash
+   ```bash
     bash -c 'extrair_e_apagar %f && notify-send "Extração concluída"'
-    ```
+   ```
 
 💬 Créditos
 
