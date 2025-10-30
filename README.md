@@ -67,6 +67,14 @@ E adicione os padrões:
 
 Clique em OK para salvar.
 
+## 🖼️ Exemplos de configuração no Thunar
+
+Abaixo estão exemplos de como configurar as ações personalizadas no Thunar para usar o script:
+
+![Configuração 1](thunar1.png)
+![Configuração 2](thunar2.png)
+
+
 4️⃣ Teste
 
 Agora, no Thunar:
