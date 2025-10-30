@@ -49,9 +49,9 @@ Descrição: Extrai o arquivo em uma pasta e apaga o original
 
 Comando:
 
-    ```bash
+   ```bash
     xfce4-terminal -e "bash -c 'extrair_e_apagar %f; exec bash'"
-    ```
+   ```
    |Isso abre um terminal mostrando o progresso da extração.
 
 3️⃣ Defina os tipos de arquivo
