@@ -22,8 +22,8 @@ zip, rar, 7z, tar, tar.gz, tar.xz, tar.bz2, tgz, tbz2, bz2, gz, Z, lz4, lzma, xz
    chmod +x extrair_e_apagar.sh
    ```
 
-3. Mova o script para um diretório da sua preferencia:
-    Ex: Documentos
+3. Mova o script para um diretório da sua preferencia: <br>
+    Ex: /usr/local/bin/
 
    ```bash
    sudo mv -i extrair_e_apagar.sh /usr/local/bin/
