@@ -47,7 +47,7 @@ Descrição: Extrai o arquivo em uma pasta e apaga o original
 Comando:
 
    ```bash
-   /usr/local/bin/acao_extrair_e_apagar.sh "%f"
+/usr/local/bin/acao_extrair_e_apagar.sh %F
    ```
 
 3️⃣ Defina os tipos de arquivo
