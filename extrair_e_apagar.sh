@@ -10,6 +10,9 @@
 
 # https://plus.diolinux.com.br/t/extrair-e-apagar-extraia-arquivos-compactados-no-xfce/78268
 
+# Fork: https://github.com/jonas854/extrair-e-apagar
+
+
 # ChangeLog
 # =========
 
@@ -21,16 +24,85 @@
 
 # Adicionada notificações gráficas usando o notify-send.
 
+
+clear
+
+
 # ----------------------------------------------------------------------------------------
+
+notifica_final(){
+
+echo -e "\n✔️ Processo concluído. \n"
+
+sleep 1
+
+notify-send "Processo concluído" "Todos os arquivos foram processados..."
+
+}
+
+
+# Problema com notify-send no OpenBox
+
+# GDBus.Error:org.freedesktop.DBus.Error.NoReply: Message recipient disconnected from message bus without replying
+
+# Significa que o daemon de notificações (notification daemon) não está rodando ou travou.
+
+
+# Para Openbox
+
+# Verifica se o Openbox está em execução
+
+if pgrep -x openbox > /dev/null; then
+
+    # Mata qualquer instância antiga do dunst
+
+    pkill dunst 2>/dev/null
+
+    # Inicia o dunst em segundo plano
+
+    dunst &
+
+    echo -e "\nOpenbox detectado — dunst reiniciado... \n"
+
+# Caso contrário, verifica se o ambiente é Wayland e usa o mako
+
+elif [ -n "$WAYLAND_DISPLAY" ]; then
+
+    # Mata qualquer instância antiga do mako
+
+    pkill mako 2>/dev/null
+
+    # Inicia o mako em segundo plano
+
+    mako &
+
+    echo -e "\nAmbiente Wayland detectado — mako iniciado... \n"
+
+else
+
+    echo -e "\nNenhum ambiente compatível detectado — nenhuma ação necessária.\n"
+
+    sleep 5
+
+fi
+
+
+
+
+
+
+# ----------------------------------------------------------------------------------------
+
 
 # Verifica se o yad está instalado
 
 if ! command -v yad &> /dev/null; then
 
-    echo "❌ O 'yad' não está instalado. Instale-o antes de continuar."
-    echo "No Debian/Ubuntu: sudo apt update && sudo apt install -y yad"
-    echo "No Fedora: sudo dnf install yad"
-    echo "No Void Linux: sudo xbps-install -Suvy yad"
+    echo -e "❌ O 'yad' não está instalado. Instale-o antes de continuar.
+
+    No Debian/Ubuntu: sudo apt update && sudo apt install -y yad
+    No Fedora: sudo dnf install yad
+    No Void Linux: sudo xbps-install -Suvy yad"
     
     sleep 20
     
@@ -42,7 +114,7 @@ fi
 
 if ! command -v notify-send &> /dev/null; then
 
-    echo "❌ O notify-send não está instalado. Instale-o antes de continuar."
+    echo -e "\n❌ O notify-send não está instalado. Instale-o antes de continuar. \n"
     
     sleep 10
     
@@ -52,9 +124,17 @@ fi
 # ----------------------------------------------------------------------------------------
 
 for arquivo in "$@"; do
+
     if [ -f "$arquivo" ]; then
+
+
         pasta_destino="$(dirname "$arquivo")"
         nome_base="$(basename "$arquivo")"
+
+        # Arquivo de log
+
+        log="$nome_base.log"
+
 
         # Remove extensões conhecidas (compostas primeiro)
         
@@ -85,37 +165,44 @@ for arquivo in "$@"; do
         
         cd "$pasta_destino" || exit 1
 
-        echo "----------------------------------------"
-        echo "Extraindo: $arquivo"
-        echo "Destino: $pasta_extraida"
-        echo "----------------------------------------"
+        echo -e "
+        ----------------------------------------
+        Extraindo: $arquivo
+        Destino:   $pasta_extraida
+        ----------------------------------------
+        "
 
         notify-send "Extração iniciada" "$arquivo → $pasta_extraida"
 
         case "$arquivo" in
-            *.tar.zst)  tar --zstd -xvf "$arquivo" -C "$pasta_extraida" ;;
-            *.tar.bz2)  tar xvjf "$arquivo" -C "$pasta_extraida" ;;
-            *.tar.gz)   tar xvzf "$arquivo" -C "$pasta_extraida" ;;
-            *.tar.xz)   tar xvJf "$arquivo" -C "$pasta_extraida" ;;
-            *.tbz2)     tar xvjf "$arquivo" -C "$pasta_extraida" ;;
-            *.tgz)      tar xvzf "$arquivo" -C "$pasta_extraida" ;;
-            *.tar)      tar xvf "$arquivo" -C "$pasta_extraida" ;;
-            *.zip)      unzip -o "$arquivo" -d "$pasta_extraida" ;;
-            *.rar)      unrar x -ad "$arquivo" "$pasta_extraida" ;;
-            *.7z)       7z x "$arquivo" -o"$pasta_extraida" ;;
-            *.bz2)      cp "$arquivo" "$pasta_extraida" && bunzip2 "$pasta_extraida/$nome_base" ;;
-            *.gz)       cp "$arquivo" "$pasta_extraida" && gunzip "$pasta_extraida/$nome_base" ;;
-            *.xz)       cp "$arquivo" "$pasta_extraida" && unxz "$pasta_extraida/$nome_base" ;;
-            *.zst)      cp "$arquivo" "$pasta_extraida" && unzstd "$pasta_extraida/$nome_base" ;;
-            *.lz4)      cp "$arquivo" "$pasta_extraida" && lz4 -d "$pasta_extraida/$nome_base" "${pasta_extraida}/${nome_sem_extensao}" ;;
-            *.lzma)     cp "$arquivo" "$pasta_extraida" && unlzma "$pasta_extraida/$nome_base" ;;
-            *.Z)        cp "$arquivo" "$pasta_extraida" && uncompress "$pasta_extraida/$nome_base" ;;
-            *.cab)      cabextract -d "$pasta_extraida" "$arquivo" ;;
-            *.iso)      7z x "$arquivo" -o"$pasta_extraida" ;;
-            *)          echo -e "\n⚠️ Tipo de arquivo não suportado: $arquivo \n" 
-                        notify-send "Aviso" "Tipo de arquivo não suportado: $arquivo" ;;
+
+            *.tar.zst)  tar --zstd -xvf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tar.bz2)  tar xvjf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tar.gz)   tar xvzf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tar.xz)   tar xvJf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tbz2)     tar xvjf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tgz)      tar xvzf "$arquivo" -C "$pasta_extraida" 2> "$log" ;;
+            *.tar)      tar xvf "$arquivo" -C "$pasta_extraida"  2> "$log" ;;
+            *.zip)      unzip -o "$arquivo" -d "$pasta_extraida" 2> "$log" ;;
+            *.rar)      unrar x -ad "$arquivo" "$pasta_extraida" 2> "$log" ;;
+            *.7z)       7z x "$arquivo" -o"$pasta_extraida" 2> "$log" ;;
+            *.bz2)      cp "$arquivo" "$pasta_extraida" && bunzip2 "$pasta_extraida/$nome_base" 2> "$log" ;;
+            *.gz)       cp "$arquivo" "$pasta_extraida" && gunzip "$pasta_extraida/$nome_base"  2> "$log" ;;
+            *.xz)       cp "$arquivo" "$pasta_extraida" && unxz "$pasta_extraida/$nome_base"    2> "$log" ;;
+            *.zst)      cp "$arquivo" "$pasta_extraida" && unzstd "$pasta_extraida/$nome_base"  2> "$log" ;;
+            *.lz4)      cp "$arquivo" "$pasta_extraida" && lz4 -d "$pasta_extraida/$nome_base" "${pasta_extraida}/${nome_sem_extensao}" 2> "$log" ;;
+            *.lzma)     cp "$arquivo" "$pasta_extraida" && unlzma "$pasta_extraida/$nome_base"     2> "$log" ;;
+            *.Z)        cp "$arquivo" "$pasta_extraida" && uncompress "$pasta_extraida/$nome_base" 2> "$log" ;;
+            *.cab)      cabextract -d "$pasta_extraida" "$arquivo" 2> "$log" ;;
+            *.iso)      7z x "$arquivo" -o"$pasta_extraida"        2> "$log" ;;
+            *)          
+                        echo -e "\n⚠️ Tipo de arquivo não suportado: $arquivo \n"
+
+                        notify-send "Aviso" "Tipo de arquivo não suportado: $arquivo"
             ;;
+
         esac
+
 
         if [ $? -eq 0 ]; then
         
@@ -146,26 +233,46 @@ for arquivo in "$@"; do
                 2> /dev/null
             
             if [ $? -eq 0 ]; then
-                rm -f "$arquivo"
-                echo "✅ Extraído e removido: $arquivo"
+
+                rm -f "$arquivo" 2>> "$log"
+
+                echo -e "\n✅ Extraído e removido: $arquivo \n"
+
                 notify-send "Arquivo removido" "$arquivo"
+
+                notifica_final
+
             else
-                echo "🟡 Arquivo mantido: $arquivo"
+
+                echo -e "\n🟡 Arquivo mantido: $arquivo \n"
+
                 notify-send "Arquivo mantido" "$arquivo"
+
+                notifica_final
             fi
+
         else
-            echo "⚠️ Erro ao extrair: $arquivo"
+
+            echo -e "\n⚠️ Erro ao extrair: $arquivo \n"
+
             notify-send "Erro" "Falha ao extrair: $arquivo"
         fi
+
     else
-        echo "Arquivo não encontrado: $arquivo"
+
+        echo -e "\nArquivo não encontrado: $arquivo \n"
+
         notify-send "Aviso" "Arquivo não encontrado: $arquivo"
+
     fi
+
 done
 
 
-echo -e "\n✔️ Processo concluído.\n"
-sleep 1
-notify-send "Processo concluído" "Todos os arquivos foram processados..."
+
+# Se o log estiver vazio, remove
+
+[ ! -s "$log" ] && rm -f "$log"
+
 
 exit 0
