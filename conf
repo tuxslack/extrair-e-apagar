@@ -1,0 +1,13 @@
+#  ~/.config/Thunar/uca.xml
+
+<action>
+	<icon>user-trash</icon>
+	<name>Extrair e apagar</name>
+	<submenu></submenu>
+	<unique-id>1761930341351381-1</unique-id>
+	<command>/usr/local/bin/acao_extrair_e_apagar.sh %F</command>
+	<description>Extrai o arquivo em uma pasta e apaga o original.</description>
+	<range>*</range>
+	<patterns>*.zip;*.rar;*.7z;*.tar;*.tar.gz;*.tar.xz;*.tar.bz2;*.tgz;*.tbz2;*.bz2;*.gz;*.Z;*.lz4;*.lzma;*.xz;*.zst;*.tar.zst;*.cab;*.iso</patterns>
+	<other-files/>
+</action>
