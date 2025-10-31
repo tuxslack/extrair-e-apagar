@@ -26,7 +26,7 @@ zip, rar, 7z, tar, tar.gz, tar.xz, tar.bz2, tgz, tbz2, bz2, gz, Z, lz4, lzma, xz
     Ex: Documentos
 
    ```bash
-   sudo mv extrair_e_apagar.sh ~/Documentos/extrair_e_apagar
+   sudo mv -i extrair_e_apagar.sh /usr/local/bin/
    ```
 
 ## 🧩 Integração com o Thunar (XFCE)
