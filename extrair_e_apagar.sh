@@ -1,61 +1,61 @@
 #!/usr/bin/env bash
 #
-# Por: Jonas Santana 
+# Por: Jonas Santana
 # Colaboração: Fernando Souza https://github.com/tuxslack / https://www.youtube.com/@fernandosuporte
 # Data: 31/10/2025
-# Licença:  MIT
+# Licença: MIT
 #
 # Extrai arquivos compactados para uma pasta com o nome do arquivo
-# e remove o original após extração bem-sucedida.
-#
-# https://plus.diolinux.com.br/t/extrair-e-apagar-extraia-arquivos-compactados-no-xfce/78268
-#
-# ChangeLog
-# =========
-# Fernando Souza - 31/10/2025
-# • Adicionadas notificações gráficas (notify-send)
-# • Suporte a novos formatos (.xz, .zst, .tar.zst, .lzma, .cab, .iso)
-# • Removida confirmação com YAD (por decisão do autor original)
-# ----------------------------------------------------------------------------------------
+# e remove o original após extração, se desejado pelo usuário.
 
-# Verifica se o notify-send está instalado
-if ! command -v notify-send &> /dev/null; then
-    echo "❌ O notify-send não está instalado. Instale-o antes de continuar."
-    echo "No Debian/Ubuntu: sudo apt update && sudo apt install -y libnotify-bin"
-    sleep 5
+# ----------------------------------------------------------------------------------------
+# Pré-requisitos
+if ! command -v yad &>/dev/null; then
+    notify-send "❌ Dependência ausente" "'yad' não está instalado. Instale com: sudo apt install -y yad"
+    exit 1
+fi
+
+if ! command -v notify-send &>/dev/null; then
+    echo "❌ O 'notify-send' não está instalado. Instale com: sudo apt install -y libnotify-bin"
+    exit 1
 fi
 
 # ----------------------------------------------------------------------------------------
+# Pergunta única para todos os arquivos
+yad --center \
+    --title="Remover arquivos originais?" \
+    --question \
+    --text="Deseja remover os arquivos originais após a extração?\n\n(Será removido automaticamente em 6 segundos se não houver resposta)" \
+    --buttons-layout=center \
+    --button="Sim:0" --button="Não:1" \
+    --timeout=6 \
+    --timeout-indicator=bottom \
+    --width="500" --height="150" \
+    2>/dev/null
 
+resposta=$?
+
+# Converter resposta em SIM/NAO
+if [ "$resposta" -eq 1 ]; then
+    REMOVER="NAO"
+else
+    REMOVER="SIM"
+fi
+
+# ----------------------------------------------------------------------------------------
+# Loop de extração
 for arquivo in "$@"; do
     if [ -f "$arquivo" ]; then
         pasta_destino="$(dirname "$arquivo")"
         nome_base="$(basename "$arquivo")"
 
-        # Remove extensões conhecidas (compostas primeiro)
+        # Remove extensões conhecidas
         nome_sem_extensao="$nome_base"
-        nome_sem_extensao="${nome_sem_extensao%.tar.zst}"
-        nome_sem_extensao="${nome_sem_extensao%.tar.bz2}"
-        nome_sem_extensao="${nome_sem_extensao%.tar.gz}"
-        nome_sem_extensao="${nome_sem_extensao%.tar.xz}"
-        nome_sem_extensao="${nome_sem_extensao%.tbz2}"
-        nome_sem_extensao="${nome_sem_extensao%.tgz}"
-        nome_sem_extensao="${nome_sem_extensao%.tar}"
-        nome_sem_extensao="${nome_sem_extensao%.zip}"
-        nome_sem_extensao="${nome_sem_extensao%.rar}"
-        nome_sem_extensao="${nome_sem_extensao%.7z}"
-        nome_sem_extensao="${nome_sem_extensao%.bz2}"
-        nome_sem_extensao="${nome_sem_extensao%.gz}"
-        nome_sem_extensao="${nome_sem_extensao%.xz}"
-        nome_sem_extensao="${nome_sem_extensao%.zst}"
-        nome_sem_extensao="${nome_sem_extensao%.lz4}"
-        nome_sem_extensao="${nome_sem_extensao%.lzma}"
-        nome_sem_extensao="${nome_sem_extensao%.Z}"
-        nome_sem_extensao="${nome_sem_extensao%.cab}"
-        nome_sem_extensao="${nome_sem_extensao%.iso}"
+        for ext in ".tar.zst" ".tar.bz2" ".tar.gz" ".tar.xz" ".tbz2" ".tgz" ".tar" ".zip" ".rar" ".7z" ".bz2" ".gz" ".xz" ".zst" ".lz4" ".lzma" ".Z" ".cab" ".iso"; do
+            nome_sem_extensao="${nome_sem_extensao%$ext}"
+        done
 
         pasta_extraida="$pasta_destino/$nome_sem_extensao"
-
         mkdir -p "$pasta_extraida"
         cd "$pasta_destino" || exit 1
 
@@ -86,17 +86,18 @@ for arquivo in "$@"; do
             *.Z)        cp "$arquivo" "$pasta_extraida" && uncompress "$pasta_extraida/$nome_base" ;;
             *.cab)      cabextract -d "$pasta_extraida" "$arquivo" ;;
             *.iso)      7z x "$arquivo" -o"$pasta_extraida" ;;
-            *)          echo -e "\n⚠️ Tipo de arquivo não suportado: $arquivo \n"
+            *)          echo "⚠️ Tipo de arquivo não suportado: $arquivo"
                         notify-send "Aviso" "Tipo de arquivo não suportado: $arquivo" ;;
         esac
 
-        if [ $? -eq 0 ]; then
+        # Remove arquivo original se opção SIM
+        if [ "$REMOVER" = "SIM" ]; then
             rm -f "$arquivo"
             echo "✅ Extraído e removido: $arquivo"
-            notify-send "Extraído e removido" "$arquivo"
+            notify-send "Arquivo removido" "$arquivo"
         else
-            echo "⚠️ Erro ao extrair: $arquivo"
-            notify-send "Erro" "Falha ao extrair: $arquivo"
+            echo "🟡 Arquivo mantido: $arquivo"
+            notify-send "Arquivo mantido" "$arquivo"
         fi
     else
         echo "Arquivo não encontrado: $arquivo"
@@ -104,6 +105,6 @@ for arquivo in "$@"; do
     fi
 done
 
-echo -e "\n✔️ Processo concluído.\n"
 notify-send "Processo concluído" "Todos os arquivos foram processados..."
 exit 0
+
