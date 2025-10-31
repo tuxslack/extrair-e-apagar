@@ -119,6 +119,20 @@ for arquivo in "$@"; do
 
         if [ $? -eq 0 ]; then
         
+            # Tem certeza que deseja excluir o arquivo?
+
+# Evitar exclusões acidentais
+
+# Um clique errado ou uma confusão de nomes pode levar o usuário a apagar algo importante.
+# Por isso, confirmar a ação reduz o risco de perda irreversível de informações.
+
+# Baseado na prevenção de erros. (Jakob Nielsen)
+
+# A boa prática de design manda que ações destrutivas peçam confirmação explícita.
+
+# O sistema deve sempre manter o usuário informado sobre o que está acontecendo. (Jakob Nielsen)
+
+
             # Pergunta via YAD se o usuário deseja remover
             
             yad \
