@@ -82,5 +82,5 @@ Escolha Ações personalizadas → Extrair e apagar
 
 💬 Créditos
 
-Criado por Jonas S.
+Criado por Jonas S. <br>
 Colaboração: Fernando Souza (https://github.com/tuxslack)
