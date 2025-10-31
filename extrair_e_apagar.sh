@@ -123,6 +123,42 @@ fi
 
 # ----------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------
+# Pré-requisitos
+if ! command -v yad &>/dev/null; then
+    notify-send "❌ Dependência ausente" "'yad' não está instalado. Instale com: sudo apt install -y yad"
+    exit 1
+fi
+
+if ! command -v notify-send &>/dev/null; then
+    echo "❌ O 'notify-send' não está instalado. Instale com: sudo apt install -y libnotify-bin"
+    exit 1
+fi
+
+# ----------------------------------------------------------------------------------------
+# Pergunta única para todos os arquivos
+yad --center \
+    --title="Remover arquivos originais?" \
+    --question \
+    --text="Deseja remover os arquivos originais após a extração?\n\n(Será removido automaticamente em 6 segundos se não houver resposta)" \
+    --buttons-layout=center \
+    --button="Sim:0" --button="Não:1" \
+    --timeout=6 \
+    --timeout-indicator=bottom \
+    --width="500" --height="150" \
+    2>/dev/null
+
+resposta=$?
+
+# Converter resposta em SIM/NAO
+if [ "$resposta" -eq 1 ]; then
+    REMOVER="NAO"
+else
+    REMOVER="SIM"
+fi
+
+# ----------------------------------------------------------------------------------------
+# Loop de extração
 for arquivo in "$@"; do
 
     if [ -f "$arquivo" ]; then
@@ -160,7 +196,6 @@ for arquivo in "$@"; do
         nome_sem_extensao="${nome_sem_extensao%.iso}"
 
         pasta_extraida="$pasta_destino/$nome_sem_extensao"
-
         mkdir -p "$pasta_extraida"
         
         cd "$pasta_destino" || exit 1
@@ -171,6 +206,8 @@ for arquivo in "$@"; do
         Destino:   $pasta_extraida
         ----------------------------------------
         "
+
+        notify-send "Extração iniciada" "$arquivo → $pasta_extraida"
 
         notify-send "Extração iniciada" "$arquivo → $pasta_extraida"
 
