@@ -151,7 +151,7 @@ done
 
 
 echo -e "\n✔️ Processo concluído.\n"
-
+sleep 1
 notify-send "Processo concluído" "Todos os arquivos foram processados..."
 
 exit 0
