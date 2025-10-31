@@ -3,8 +3,8 @@
 Script simples para extrair arquivos compactados dentro de uma pasta com o mesmo nome do arquivo e, após a extração bem-sucedida, **apagar o arquivo original compactado**.  
 Ideal para quem quer evitar duplicar espaço entre o `.zip` e os arquivos extraídos.
 
-Compatível com:  
-`zip`, `rar`, `7z`, `tar`, `tar.gz`, `tar.xz`, `tar.bz2`, `tgz`, `tbz2`, `bz2`, `gz`, `Z`, `lz4`.
+Compatível com:
+zip, rar, 7z, tar, tar.gz, tar.xz, tar.bz2, tgz, tbz2, bz2, gz, Z, lz4, lzma, xz, zst, tar.zst, cab, iso.
 
 ---
 
@@ -58,7 +58,7 @@ Na aba Condições de aparência, marque:
 
 E adicione os padrões:
    ```bash
-    *.zip;*.rar;*.7z;*.tar;*.gz;*.bz2;*.xz;*.tgz;*.tbz2;*.lz4
+    *.zip;*.rar;*.7z;*.tar;*.tar.gz;*.tar.xz;*.tar.bz2;*.tgz;*.tbz2;*.bz2;*.gz;*.Z;*.lz4;*.lzma;*.xz;*.zst;*.tar.zst;*.cab;*.iso
    ```
 
 Clique em OK para salvar.
@@ -83,3 +83,4 @@ Escolha Ações personalizadas → Extrair e apagar
 💬 Créditos
 
 Criado por Jonas S.
+Colaboração: Fernando Souza (https://github.com/tuxslack)
