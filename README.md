@@ -58,7 +58,7 @@ Na aba Condições de aparência, marque:
 
 E adicione os padrões:
    ```bash
-    *
+*.zip;*.rar;*.7z;*.tar;*.tar.gz;*.tar.xz;*.tar.bz2;*.tgz;*.tbz2;*.bz2;*.gz;*.Z;*.lz4;*.lzma;*.xz;*.zst;*.tar.zst;*.cab;*.iso
    ```
 
 Clique em OK para salvar.
