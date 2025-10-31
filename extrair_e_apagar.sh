@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Por: Jonas Santana
+# Por: Jonas Santana 
 # Colaboração: Fernando Souza https://github.com/tuxslack / https://www.youtube.com/@fernandosuporte
 # Data: 31/10/2025
 # Licença:  MIT
