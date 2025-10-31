@@ -47,7 +47,7 @@ Descrição: Extrai o arquivo em uma pasta e apaga o original
 Comando:
 
    ```bash
-   ~/Documentos/extrair_e_apagar %f
+   ~/Documentos/extrair_e_apagar %F
    ```
 
 3️⃣ Defina os tipos de arquivo
@@ -78,6 +78,24 @@ Agora, no Thunar:
 Clique com o botão direito em um arquivo .zip (ou outro compatível)
 
 Escolha Ações personalizadas → Extrair e apagar
+
+⏱️ Confirmação com YAD e timeout
+
+O script utiliza YAD para perguntar uma única vez se os arquivos originais devem ser apagados após a extração.
+
+Se o usuário clicar Sim, os arquivos são removidos após a extração.
+
+Se clicar Não, os arquivos permanecem no disco.
+
+Caso não haja resposta em 6 segundos (timeout), o script considera Sim como padrão e remove os arquivos automaticamente.
+
+Essa abordagem foi implementada por dois motivos:
+
+Segurança e prevenção de erros: evita exclusão acidental de arquivos importantes, seguindo boas práticas de design de interação (Jakob Nielsen).
+
+Eficiência de espaço: ao remover imediatamente os arquivos após extrair, evita ocupar espaço desnecessário com arquivos duplicados, especialmente útil ao lidar com múltiplos arquivos grandes.
+
+💡 A ideia do timeout com YAD foi do colaborador Fernando Souza, permitindo que o script seja seguro e prático sem bloquear o fluxo de extração.
 
 
 💬 Créditos
