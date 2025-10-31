@@ -22,14 +22,11 @@ Compatível com:
    chmod +x extrair_e_apagar.sh
    ```
 
-3. (Opcional) Mova o script para um diretório no seu PATH:
+3. Mova o script para um diretório da sua preferencia:
+    Ex: Documentos
+
    ```bash
-   sudo mv extrair_e_apagar.sh /usr/local/bin/extrair_e_apagar
-   ```
-   ou, se preferir manter no seu usuário:
-   ```bash
-   mkdir -p ~/.local/bin
-   mv extrair_e_apagar.sh ~/.local/bin/extrair_e_apagar
+   sudo mv extrair_e_apagar.sh ~/Documentos/extrair_e_apagar
    ```
 
 ## 🧩 Integração com o Thunar (XFCE)
@@ -50,9 +47,8 @@ Descrição: Extrai o arquivo em uma pasta e apaga o original
 Comando:
 
    ```bash
-    xfce4-terminal -e "bash -c 'extrair_e_apagar %f; exec bash'"
+   ~/Documentos/extrair_e_apagar %f
    ```
-   |Isso abre um terminal mostrando o progresso da extração.
 
 3️⃣ Defina os tipos de arquivo
 
@@ -83,20 +79,6 @@ Clique com o botão direito em um arquivo .zip (ou outro compatível)
 
 Escolha Ações personalizadas → Extrair e apagar
 
-Um terminal abrirá mostrando o progresso; ao finalizar, o arquivo original será removido.
-
-
-🧠 Dica extra
-
-Se quiser, você pode mudar o comando para não abrir terminal (rodar silencioso):
-
-   ```bash
-    bash -c 'extrair_e_apagar %f'
-   ```
-Ou, se quiser uma notificação no fim:
-   ```bash
-    bash -c 'extrair_e_apagar %f && notify-send "Extração concluída"'
-   ```
 
 💬 Créditos
 
