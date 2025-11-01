@@ -30,7 +30,7 @@ zip, rar, 7z, tar, tar.gz, tar.xz, tar.bz2, tgz, tbz2, bz2, gz, Z, lz4, lzma, xz
    ```
 
 ## 🧩 Integração com o Thunar (XFCE)
-Você pode integrar o script diretamente ao menu de contexto do Thunar (clicar com o botão direito > "Extrair e apagar").
+Você pode integrar o script diretamente ao menu de contexto do Thunar.
 
 1️⃣ Abra as ações personalizadas do Thunar
 
@@ -40,9 +40,9 @@ Clique em + para adicionar uma nova ação.
 
 2️⃣ Preencha os campos:
 
-Nome: Extrair e apagar
+Nome: Extrair aqui e excluir arquivo
 
-Descrição: Extrai o arquivo em uma pasta e apaga o original
+Descrição: Extrai o arquivo em uma pasta e apaga o original.
 
 Comando:
 
@@ -54,7 +54,7 @@ Comando:
 
 Na aba Condições de aparência, marque:
 
-“Arquivos”
+“Outros arquivos”
 
 E adicione os padrões:
    ```bash
@@ -83,9 +83,7 @@ Agora, no Thunar:
 
 Clique com o botão direito em um arquivo .zip (ou outro compatível)
 
-Escolha Ações personalizadas → Extrair e apagar
-
-⏱️ Confirmação com YAD e timeout
+Escolha Ações personalizadas → Extrair aqui e excluir arquivo
 
 O script utiliza YAD para perguntar uma única vez se os arquivos originais devem ser apagados após a extração.
 
@@ -93,7 +91,6 @@ Se o usuário clicar Sim, os arquivos são removidos após a extração.
 
 Se clicar Não, os arquivos permanecem no disco.
 
-Caso não haja resposta em 6 segundos (timeout), o script considera Sim como padrão e remove os arquivos automaticamente.
 
 Essa abordagem foi implementada por dois motivos:
 
@@ -101,7 +98,6 @@ Segurança e prevenção de erros: evita exclusão acidental de arquivos importa
 
 Eficiência de espaço: ao remover imediatamente os arquivos após extrair, evita ocupar espaço desnecessário com arquivos duplicados, especialmente útil ao lidar com múltiplos arquivos grandes.
 
-💡 A ideia do timeout com YAD foi do colaborador Fernando Souza, permitindo que o script seja seguro e prático sem bloquear o fluxo de extração.
 
 
 💬 Créditos
