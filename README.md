@@ -1,4 +1,7 @@
-# extrair-e-apagar
+# Extrair aqui e excluir arquivo
+
+[![Assista ao vídeo no YouTube](https://img.youtube.com/vi/hn6QUUTlq1g/hqdefault.jpg)](https://www.youtube.com/watch?v=hn6QUUTlq1g)
+
 
 Script simples para extrair arquivos compactados dentro de uma pasta com o mesmo nome do arquivo e, após a extração bem-sucedida, **apagar o arquivo original compactado**.  
 Ideal para quem quer evitar duplicar espaço entre o `.zip` e os arquivos extraídos.
