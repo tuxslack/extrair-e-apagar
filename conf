@@ -2,7 +2,7 @@
 
 <action>
 	<icon>user-trash</icon>
-	<name>Extrair e apagar</name>
+	<name>Extrair aqui e excluir arquivo</name>
 	<submenu></submenu>
 	<unique-id>1761930341351381-1</unique-id>
 	<command>/usr/local/bin/acao_extrair_e_apagar.sh %F</command>
